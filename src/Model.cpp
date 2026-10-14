@@ -130,8 +130,12 @@ double currentTick =
 if (repast::RepastProcess::instance()->rank() == 0) {
     printf("Tick: %.1f\tAvg satisfied: %.2f\n",
            currentTick, avgSatisfied);
-    if (currentTick == 1 || currentTick == stopAt)
+
+    if (currentTick == 1 || currentTick == stopAt || avgSatisfied == 1)
         printToScreen();
+
+    if (avgSatisfied == 1)
+        repast::RepastProcess::instance()->getScheduleRunner().stop();
 }
 
 // Move dissatisfied agents

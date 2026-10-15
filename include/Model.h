@@ -9,9 +9,43 @@
 #include "repast_hpc/GridComponents.h"
 
 #include "Agent.h"
+#include "repast_hpc/AgentRequest.h"
+#include "repast_hpc/TDataSource.h"
+#include "repast_hpc/SVDataSet.h"
 
+
+class AgentPackageProvider {
+private:
+    repast::SharedContext<Agent>* agents;
+
+public:
+    AgentPackageProvider(repast::SharedContext<Agent>* agentPtr);
+    void providePackage(Agent* agent, std::vector<AgentPackage>& out);
+    void provideContent(repast::AgentRequest req, std::vector<AgentPackage>& out);
+};
+class AgentPackageReceiver {
+private:
+    repast::SharedContext<Agent>* agents;
+
+public:
+    AgentPackageReceiver(repast::SharedContext<Agent>* agentPtr);
+    Agent* createAgent(AgentPackage package);
+    void updateAgent(AgentPackage package);
+};
+/* Data Collection */
+class DataSource_AgentSatisfiedTotals : public repast::TDataSource<int> {
+private:
+    repast::SharedContext<Agent>* context;
+
+public:
+    DataSource_AgentSatisfiedTotals(repast::SharedContext<Agent>* c);
+    int getData();
+};
 class SchellingModel{
 private:
+AgentPackageProvider* provider;
+AgentPackageReceiver* receiver;
+repast::SVDataSet* agentValues;
     void printToScreen();
 
 	
